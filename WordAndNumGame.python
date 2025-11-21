@@ -1,0 +1,163 @@
+
+
+import random
+import time
+from abc import ABC, abstractmethod
+
+
+# Abstract Base Class
+class BaseGame(ABC):
+
+    def __init__(self):
+        self.value = None            # Shared value between games
+        self.error_count = 0         # Track bad inputs
+        self.start_time = 0          # Track time
+        self.end_time = 0            # Track time
+    # Start timer
+    def startTimer(self):
+        self.start_time = time.time()
+    # End timer
+    def endTimer(self):
+        self.end_time = time.time()
+    # Results of game
+    def printResults(self):
+        print("Errors:", self.error_count)
+        print("Time:", round(self.end_time - self.start_time, 2), "seconds")
+
+    # Play game via abstract method
+    @abstractmethod
+    def play(self):
+        pass
+
+
+
+
+# Number Guessing Game Class
+class NumberGame(BaseGame):
+
+    def calcRandNum(self):
+        # Shared value becomes an int
+        self.value = random.randint(1, 100)
+
+    def getUserNum(self):
+        try:
+            guess = int(input("Guess a number between 1 and 100: "))
+            return guess
+        except:
+            print("Invalid number. Try again.")
+            self.error_count += 1
+            return None
+
+    def compareUserNum(self, guess):
+        if guess < self.value:
+            print("Your guess is lower than the secret number.")
+            return False
+        elif guess > self.value:
+            print("Your guess is higher than the secret number.")
+            return False
+        else:
+            return True
+
+    def play(self):
+        print("\nNUMBER GUESSING GAME")
+
+        self.startTimer()
+        self.calcRandNum()
+
+        guess = None
+        attempts = 0
+
+        while guess != self.value:
+            guess = self.getUserNum()
+
+            if guess is None:
+                continue  # bad guess
+
+            attempts += 1
+
+            if self.compareUserNum(guess):
+                break
+
+        print("\nGood job, you guessed the secret number!")
+        print("It took you", attempts, "tries")
+
+        self.endTimer()
+        self.printResults()
+
+
+
+# Word Game Class
+class WordGame(BaseGame):
+
+    def generateRandChar(self):
+        # Shared value becomes a single random letter
+        self.value = chr(random.randint(65, 90))  # A–Z
+
+    def getUserWord(self):
+        word = input("Enter a word beginning with '" + self.value + "': ").strip()
+        if word == "":
+            print("Invalid word.")
+            self.error_count += 1
+            return None
+        return word
+
+    def compareUserWord(self, word):
+        if word is None:
+            return False
+        return word[0].upper() == self.value
+
+    def playWordGame(self):
+        self.play()
+
+    def play(self):
+        print("\nWORD SCRABBLE GAME")
+
+        self.startTimer()
+        self.generateRandChar()
+
+        print("Your letter is:", self.value)
+
+        correct = False
+        attempts = 0
+
+        while not correct:
+            word = self.getUserWord()
+            attempts += 1
+
+            if self.compareUserWord(word):
+                correct = True
+            else:
+                print("Incorrect. Try again.")
+                self.error_count += 1
+
+        print("\nGood job! Your word starts with", self.value)
+        print("Attempts:", attempts)
+
+        self.endTimer()
+        self.printResults()
+
+
+def main():
+    while True:
+        print("\nWhat game would you like to play?")
+        print("1 - Number Guessing Game")
+        print("2 - Word Game")
+        print("3 - Quit")
+
+        choice = input("Choose a game: ")
+
+        if choice == "1":
+            NumberGame().play()
+        elif choice == "2":
+            WordGame().playWordGame()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid selection. Try again.")
+
+
+
+# Run program
+if __name__ == "__main__":
+    main()
