@@ -1,0 +1,192 @@
+
+
+import random
+import time
+from abc import ABC, abstractmethod
+
+
+# Abstract Base Class
+class BaseGame(ABC):
+
+    def __init__(self):
+        self.value = None            # Shared value between games
+        self.error_count = 0         # Track bad inputs
+        self.start_time = 0          # Track time
+        self.end_time = 0            # Track time
+    # Start timer
+    def startTimer(self):
+        self.start_time = time.time()
+    # End timer
+    def endTimer(self):
+        self.end_time = time.time()
+    # Results of game
+    def printResults(self):
+        print("Errors:", self.error_count)
+        print("Time:", round(self.end_time - self.start_time, 2), "seconds")
+
+    # Play game via abstract method
+    @abstractmethod
+    def play(self):
+        pass
+
+
+
+
+# Number Guessing Game Class
+class NumberGame(BaseGame):
+
+    def calcRandNum(self):
+        # Shared value becomes an int
+        self.value = random.randint(1, 100)
+
+    def getUserNum(self):
+        try:
+            guess = int(input("Guess a number between 1 and 100: "))
+            return guess
+        except:
+            print("Invalid number. Try again.")
+            self.error_count += 1
+            return None
+
+    def compareUserNum(self, guess):
+        if guess < self.value:
+            print("Your guess is lower than the secret number.")
+            return False
+        elif guess > self.value:
+            print("Your guess is higher than the secret number.")
+            return False
+        else:
+            return True
+
+    def play(self):
+        print("\nNUMBER GUESSING GAME")
+
+        self.startTimer()
+        self.calcRandNum()
+
+        guess = None
+        attempts = 0
+
+        while guess != self.value:
+            guess = self.getUserNum()
+
+            if guess is None:
+                continue  # bad guess
+
+            attempts += 1
+
+            if self.compareUserNum(guess):
+                break
+
+        print("\nGood job, you guessed the secret number!")
+        print("It took you", attempts, "tries")
+
+        self.endTimer()
+        self.printResults()
+
+
+
+# Word Game Class
+class WordGame(BaseGame):
+
+    def __init__(self):
+        super().__init__()
+        self.points = 0
+        self.vowels = ['a', 'e', 'i', 'o', 'u']
+        self.consonants = [
+            'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm',
+            'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
+        ]
+
+    def generateLetters(self):
+        """Generate 15 characters:
+           - First 4 vowels
+           - Remaining consonants"""
+        letters = []
+
+        # First 4 letters = vowels
+        for _ in range(4):
+            letters.append(random.choice(self.vowels))
+
+        # Remaining 11 = consonants
+        for _ in range(11):
+            letters.append(random.choice(self.consonants))
+
+        return letters
+
+    def playWordGame(self):
+        self.play()
+
+    def play(self):
+        print("\nWORD SCRABBLE GAME")
+        self.startTimer()
+
+
+        while self.points < 100:
+
+            # Generate letters for this round
+            letters = self.generateLetters()
+            available = letters.copy()  # Mutable list like Scala ListBuffer
+
+
+            print("Generated characters:", ", ".join(letters))
+
+            
+            word = input("Enter your word using these characters: ").lower().strip()
+
+            if word == "":
+                print("Empty word. Try again.")
+                self.error_count += 1
+                continue
+
+            isValid = True
+
+            # Check if each char can be formed
+            for ch in word:
+                if ch not in available:
+                    print("This word cannot be formed from the given characters. 0 points awarded.")
+                    isValid = False
+                    self.error_count += 1
+                    break
+                else:
+                    available.remove(ch)  # remove used letter
+
+            if isValid:
+                score = len(word) * 10
+                self.points += score
+                print(f"Valid word! You scored {score} points.")
+                print(f"Total points: {self.points}")
+
+            # Check win
+            if self.points >= 100:
+                print("\nCongratulations! You've reached 100 points and won the game!")
+
+        self.endTimer()
+        self.printResults()
+
+
+
+def main():
+    while True:
+        print("\nWhat game would you like to play?")
+        print("1 - Number Guessing Game")
+        print("2 - Word Game")
+        print("3 - Quit")
+
+        choice = input("Choose a game: ")
+
+        if choice == "1":
+            NumberGame().play()
+        elif choice == "2":
+            WordGame().playWordGame()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid selection. Try again.")
+
+
+
+# Run program
+if __name__ == "__main__":
+    main()
