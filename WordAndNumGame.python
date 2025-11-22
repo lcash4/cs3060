@@ -89,52 +89,78 @@ class NumberGame(BaseGame):
 # Word Game Class
 class WordGame(BaseGame):
 
-    def generateRandChar(self):
-        # Shared value becomes a single random letter
-        self.value = chr(random.randint(65, 90))  # A–Z
+    def __init__(self):
+        super().__init__()
+        self.points = 0
+        self.vowels = ['a', 'e', 'i', 'o', 'u']
+        self.consonants = [
+            'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm',
+            'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
+        ]
 
-    def getUserWord(self):
-        word = input("Enter a word beginning with '" + self.value + "': ").strip()
-        if word == "":
-            print("Invalid word.")
-            self.error_count += 1
-            return None
-        return word
+    def generateLetters(self):
+        """Generate 15 characters:
+           - First 4 vowels
+           - Remaining consonants"""
+        letters = []
 
-    def compareUserWord(self, word):
-        if word is None:
-            return False
-        return word[0].upper() == self.value
+        # First 4 letters = vowels
+        for _ in range(4):
+            letters.append(random.choice(self.vowels))
+
+        # Remaining 11 = consonants
+        for _ in range(11):
+            letters.append(random.choice(self.consonants))
+
+        return letters
 
     def playWordGame(self):
         self.play()
 
     def play(self):
         print("\nWORD SCRABBLE GAME")
-
         self.startTimer()
-        self.generateRandChar()
 
-        print("Your letter is:", self.value)
+        while self.points < 100:
 
-        correct = False
-        attempts = 0
+            # Generate letters for this round
+            letters = self.generateLetters()
+            available = letters.copy()  # Mutable list like Scala ListBuffer
 
-        while not correct:
-            word = self.getUserWord()
-            attempts += 1
+            print("Generated characters:", ", ".join(letters))
 
-            if self.compareUserWord(word):
-                correct = True
-            else:
-                print("Incorrect. Try again.")
+            word = input("Enter your word using these characters: ").lower().strip()
+
+            if word == "":
+                print("Empty word. Try again.")
                 self.error_count += 1
+                continue
 
-        print("\nGood job! Your word starts with", self.value)
-        print("Attempts:", attempts)
+            isValid = True
+
+            # Check if each char can be formed
+            for ch in word:
+                if ch not in available:
+                    print("This word cannot be formed from the given characters. 0 points awarded.")
+                    isValid = False
+                    self.error_count += 1
+                    break
+                else:
+                    available.remove(ch)  # remove used letter
+
+            if isValid:
+                score = len(word) * 10
+                self.points += score
+                print(f"Valid word! You scored {score} points.")
+                print(f"Total points: {self.points}")
+
+            # Check win
+            if self.points >= 100:
+                print("\nCongratulations! You've reached 100 points and won the game!")
 
         self.endTimer()
         self.printResults()
+
 
 
 def main():
