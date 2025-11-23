@@ -5,20 +5,21 @@ import scala.util.control.Breaks.{break, breakable}
 
 object WordGame {
 
-    def game(): Unit = {
+    def play(): Unit = {
         var points = 0
 
         
         while points < 100 do {
-            val randomString = calcChars()
-            points += userGuess(randomString)
+            val randomString = calcRanChars()
+            val inputWord = userWord()
+            points += compareUserWord(inputWord, randomString)
             println(s"Total points: $points")
             println("")
         }
         println("Congratulations! You've at least reached 100 points and won the game!") 
     }
 
-    def calcChars(): ListBuffer[Char] = {
+    def calcRanChars(): ListBuffer[Char] = {
         val listOfConsanants = List('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z')
         val listOfVowels = List('a', 'e', 'i', 'o', 'u')
             
@@ -36,10 +37,13 @@ object WordGame {
         return randomString
     }
 
-    def userGuess(randomString: ListBuffer[Char]): Int = {
-        var score = 0
+    def userWord(): String = {
         val userword = readLine("Enter your word using these characters: ").toLowerCase()
-            
+        return userword
+    }
+
+    def compareUserWord(userword: String, randomString: ListBuffer[Char]): Int = {
+        var score = 0
         var isValid = true
 
         breakable {
@@ -62,6 +66,6 @@ object WordGame {
     }
 
     def main(args: Array[String]):Unit = {
-        game()
+        play()
     }
 }
