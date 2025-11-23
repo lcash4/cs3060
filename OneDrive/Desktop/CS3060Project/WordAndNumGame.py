@@ -49,11 +49,11 @@ class NumberGame(BaseGame):
             self.error_count += 1
             return None
 
-    def compareUserNum(self, guess):
-        if self.userInput < self.value:
+    def compareUserNum(self, userNum):
+        if userNum < self.value:
             print("Your guess is lower than the secret number.")
             return False
-        elif self.userInput > self.value:
+        elif userNum > self.value:
             print("Your guess is higher than the secret number.")
             return False
         else:
@@ -65,7 +65,6 @@ class NumberGame(BaseGame):
         self.startTimer()
         self.calcRandNum()
 
-        guess = None
         attempts = 0
 
         while self.userInput != self.value:
@@ -99,7 +98,7 @@ class WordGame(BaseGame):
             'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
         ]
 
-    def generateLetters(self):
+    def generateRanChar(self):
         """Generate 15 characters:
            - First 4 vowels
            - Remaining consonants"""
@@ -116,22 +115,25 @@ class WordGame(BaseGame):
 
     def playWordGame(self):
         self.play()
+    
+    def GetuserWord(self):
+        self.userInput = input("Enter your word using these characters: ").lower().strip()
+        return self.userInput
 
     def play(self):
         print("\nWORD SCRABBLE GAME")
         self.startTimer()
 
-
         while self.points < 100:
 
             # Generate letters for this round
-            self.value = self.generateLetters()
+            self.value = self.generateRanChar()
             available = self.value.copy()  # Mutable list like Scala ListBuffer
 
 
             print("Generated characters:", ", ".join(self.value))
 
-            self.userInput = input("Enter your word using these characters: ").lower().strip()
+            self.userInput = self.GetuserWord()
 
             if self.userInput == "":
                 print("Empty word. Try again.")
