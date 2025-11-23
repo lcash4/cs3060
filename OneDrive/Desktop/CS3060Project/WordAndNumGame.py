@@ -115,8 +115,8 @@ class WordGame(BaseGame):
 
     def playWordGame(self):
         self.play()
-    
-    def GetuserWord(self):
+
+    def getUserWord(self):
         self.userInput = input("Enter your word using these characters: ").lower().strip()
         return self.userInput
 
@@ -133,7 +133,7 @@ class WordGame(BaseGame):
 
             print("Generated characters:", ", ".join(self.value))
 
-            self.userInput = self.GetuserWord()
+            self.userInput = self.getUserWord()
 
             if self.userInput == "":
                 print("Empty word. Try again.")
