@@ -13,6 +13,7 @@ class BaseGame(ABC):
         self.error_count = 0         # Track bad inputs
         self.start_time = 0          # Track time
         self.end_time = 0            # Track time
+        self.userInput = None       # Shared user input
     # Start timer
     def startTimer(self):
         self.start_time = time.time()
@@ -41,18 +42,18 @@ class NumberGame(BaseGame):
 
     def getUserNum(self):
         try:
-            guess = int(input("Guess a number between 1 and 100: "))
-            return guess
+            self.userInput = int(input("Guess a number between 1 and 100: "))
+            return self.userInput
         except:
             print("Invalid number. Try again.")
             self.error_count += 1
             return None
 
     def compareUserNum(self, guess):
-        if guess < self.value:
+        if self.userInput < self.value:
             print("Your guess is lower than the secret number.")
             return False
-        elif guess > self.value:
+        elif self.userInput > self.value:
             print("Your guess is higher than the secret number.")
             return False
         else:
@@ -67,15 +68,15 @@ class NumberGame(BaseGame):
         guess = None
         attempts = 0
 
-        while guess != self.value:
-            guess = self.getUserNum()
+        while self.userInput != self.value:
+            self.userInput = self.getUserNum()
 
-            if guess is None:
+            if self.userInput is None:
                 continue  # bad guess
 
             attempts += 1
 
-            if self.compareUserNum(guess):
+            if self.compareUserNum(self.userInput):
                 break
 
         print("\nGood job, you guessed the secret number!")
@@ -102,17 +103,16 @@ class WordGame(BaseGame):
         """Generate 15 characters:
            - First 4 vowels
            - Remaining consonants"""
-        letters = []
+        self.value = []
 
         # First 4 letters = vowels
         for _ in range(4):
-            letters.append(random.choice(self.vowels))
-
+            self.value.append(random.choice(self.vowels))
         # Remaining 11 = consonants
         for _ in range(11):
-            letters.append(random.choice(self.consonants))
+            self.value.append(random.choice(self.consonants))
 
-        return letters
+        return self.value
 
     def playWordGame(self):
         self.play()
@@ -125,16 +125,15 @@ class WordGame(BaseGame):
         while self.points < 100:
 
             # Generate letters for this round
-            letters = self.generateLetters()
-            available = letters.copy()  # Mutable list like Scala ListBuffer
+            self.value = self.generateLetters()
+            available = self.value.copy()  # Mutable list like Scala ListBuffer
 
 
-            print("Generated characters:", ", ".join(letters))
+            print("Generated characters:", ", ".join(self.value))
 
-            
-            word = input("Enter your word using these characters: ").lower().strip()
+            self.userInput = input("Enter your word using these characters: ").lower().strip()
 
-            if word == "":
+            if self.userInput == "":
                 print("Empty word. Try again.")
                 self.error_count += 1
                 continue
@@ -142,7 +141,7 @@ class WordGame(BaseGame):
             isValid = True
 
             # Check if each char can be formed
-            for ch in word:
+            for ch in self.userInput:
                 if ch not in available:
                     print("This word cannot be formed from the given characters. 0 points awarded.")
                     isValid = False
@@ -152,7 +151,7 @@ class WordGame(BaseGame):
                     available.remove(ch)  # remove used letter
 
             if isValid:
-                score = len(word) * 10
+                score = len(self.userInput) * 10
                 self.points += score
                 print(f"Valid word! You scored {score} points.")
                 print(f"Total points: {self.points}")
