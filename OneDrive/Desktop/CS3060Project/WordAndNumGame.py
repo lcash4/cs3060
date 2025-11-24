@@ -119,6 +119,20 @@ class WordGame(BaseGame):
     def getUserWord(self):
         self.userInput = input("Enter your word using these characters: ").lower().strip()
         return self.userInput
+    
+    def compareUserWord(self, userword, available):
+        isValid = True
+
+        for ch in userword:
+            if ch not in available:
+                print("This word cannot be formed from the given characters. 0 points awarded.")
+                isValid = False
+                self.error_count += 1
+                break
+            else:
+                available.remove(ch)  # remove used letter
+
+        return isValid
 
     def play(self):
         print("\nWORD SCRABBLE GAME")
@@ -140,17 +154,7 @@ class WordGame(BaseGame):
                 self.error_count += 1
                 continue
 
-            isValid = True
-
-            # Check if each char can be formed
-            for ch in self.userInput:
-                if ch not in available:
-                    print("This word cannot be formed from the given characters. 0 points awarded.")
-                    isValid = False
-                    self.error_count += 1
-                    break
-                else:
-                    available.remove(ch)  # remove used letter
+            isValid = self.compareUserWord(self.userInput, available)
 
             if isValid:
                 score = len(self.userInput) * 10
