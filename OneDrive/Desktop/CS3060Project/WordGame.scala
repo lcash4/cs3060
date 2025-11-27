@@ -12,7 +12,11 @@ object WordGame {
         while points < 100 do {
             val randomString = calcRanChars()
             val inputWord = userWord()
+            val start = System.nanoTime()
             points += compareUserWord(inputWord, randomString)
+            val end = System.nanoTime()
+            val duration = (end - start) / 1e9d
+            println(s"Comparison time completed in $duration seconds.")
             println(s"Total points: $points")
             println("")
         }

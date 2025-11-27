@@ -7,12 +7,20 @@ object NumGame {
         var found = false
         while found == false do {
             val usernum = getUserNum()
+            val start = System.nanoTime()
             found = compareUserNum(usernum, randomNum)
+            val end = System.nanoTime()
+            val duration = (end - start) / 1e9d
+            println(s"Game completed in $duration seconds.")
         }
     }
 
     def getUserNum(): Int = {
         val usernum = readLine("Enter a number between 0 and 100: ").toInt
+        if (usernum < 0 || usernum > 100) {
+            println("Number out of range. Please try again.")
+            return getUserNum()
+        }
         println(s"You entered: $usernum")
         return usernum
     }
@@ -34,7 +42,6 @@ object NumGame {
     }
 
     def main(args: Array[String]):Unit = {
-
         val randomNum = calcRandNumber()
         play(randomNum)
     }
