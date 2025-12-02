@@ -3,19 +3,40 @@ import scala.util.Random
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.{break, breakable}
 
+
+// Word Game where user tries to form words from random characters to earn points
+// This object contains methods to play the game, generate random characters, get user input, and compare the user's word to the generated characters.
 object WordGame {
 
+    // Main game loop
     def play(): Unit = {
+       
+        // Initialize points
         var points = 0
-
+        println("Welcome to the Word Game! Reach at least 100 points to win.")
         
+        // Continue until user reaches 100 points
         while points < 100 do {
+            
+            // Generate random characters using the function made below
             val randomString = calcRanChars()
+
+            // Get user input word using the function made below
             val inputWord = userWord()
+
+            // Start timing the amount of time it takes to perform the comparison
             val start = System.nanoTime()
+
+            // Compare user word to random characters and update points
             points += compareUserWord(inputWord, randomString)
+
+            // End timing and calculate duration
             val end = System.nanoTime()
+
+            // Calculate and display duration of comparison
             val duration = (end - start) / 1e9d
+
+            // Display comparison time and total points
             println(s"Comparison time completed in $duration seconds.")
             println(s"Total points: $points")
             println("")
@@ -23,11 +44,14 @@ object WordGame {
         println("Congratulations! You've at least reached 100 points and won the game!") 
     }
 
+    // Function to generate a list of random characters (vowels and consonants)
     def calcRanChars(): ListBuffer[Char] = {
+        // Lists of consonants and vowels
         val listOfConsanants = List('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z')
         val listOfVowels = List('a', 'e', 'i', 'o', 'u')
             
-            
+
+        // Generate a list of 15 random characters (with 4 vowels)    
         var randomString = ListBuffer[Char]()
         for (i <- 1 to 15) yield {
             if (i < 5) {
@@ -36,20 +60,26 @@ object WordGame {
                 randomString += listOfConsanants(Random.nextInt(listOfConsanants.length))
             }
         }
+
+        // This prints out the generated characters as a string for the user to see
         val ranWordString = randomString.mkString(", ")
         println(s"Generated characters: ${ranWordString}")
         return randomString
     }
 
+    // Function to get the user's input word
     def userWord(): String = {
         val userword = readLine("Enter your word using these characters: ").toLowerCase()
         return userword
     }
 
+    // Function to compare the user's word to the generated characters and calculate score
     def compareUserWord(userword: String, randomString: ListBuffer[Char]): Int = {
         var score = 0
         var isValid = true
 
+        // This breakable block checks if the user's word can be formed from the generated characters, if it detects an invalid character it breaks out and awards 0 points
+        // If the word is valid, it calculates the score based on word length
         breakable {
             for (char <- userword) {
                 if (!randomString.contains(char)) {
@@ -69,6 +99,7 @@ object WordGame {
         return score
     }
 
+    // Main method enters to simplystart the game
     def main(args: Array[String]):Unit = {
         play()
     }
