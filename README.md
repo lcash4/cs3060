@@ -1,1 +1,1 @@
-"# cs3060" 
+This project holds 2 games written in two different languages, One is a word game, the other is a number game. The purpose is to understand the difference in dynamic and static typing in languages. We prioritize to understand which performs better, which is more easy to read, and especially how dynamic typing can apply to games
