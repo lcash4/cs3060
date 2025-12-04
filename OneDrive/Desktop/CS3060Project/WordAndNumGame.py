@@ -13,17 +13,17 @@ class BaseGame(ABC):
         self.error_count = 0         # Track bad inputs
         self.start_time = 0          # Track time
         self.end_time = 0            # Track time
-        self.userInput = None       # Shared user input
+        self.userInput = None        # Shared user input
     # Start timer
     def startTimer(self):
-        self.start_time = time.time()
+        self.start_time = time.perf_counter()
     # End timer
     def endTimer(self):
-        self.end_time = time.time()
+        self.end_time = time.perf_counter()
     # Results of game
     def printResults(self):
         print("Errors:", self.error_count)
-        print("Time:", round(self.end_time - self.start_time, 2), "seconds")
+        print("Time:", (self.end_time - self.start_time), "seconds")
 
     # Play game via abstract method
     @abstractmethod
@@ -64,6 +64,9 @@ class NumberGame(BaseGame):
 
         self.startTimer()
         self.calcRandNum()
+        self.endTimer()
+        self.printResults()
+
 
         attempts = 0
 
@@ -81,8 +84,6 @@ class NumberGame(BaseGame):
         print("\nGood job, you guessed the secret number!")
         print("It took you", attempts, "tries")
 
-        self.endTimer()
-        self.printResults()
 
 
 
@@ -131,17 +132,19 @@ class WordGame(BaseGame):
                 break
             else:
                 available.remove(ch)  # remove used letter
-
         return isValid
 
     def play(self):
         print("\nWORD SCRABBLE GAME")
-        self.startTimer()
+        
 
         while self.points < 100:
-
+            
             # Generate letters for this round
+            self.startTimer()
             self.value = self.generateRanChar()
+            self.endTimer()
+            self.printResults()
             available = self.value.copy()  # Mutable list like Scala ListBuffer
 
 
@@ -153,8 +156,10 @@ class WordGame(BaseGame):
                 print("Empty word. Try again.")
                 self.error_count += 1
                 continue
+            
 
             isValid = self.compareUserWord(self.userInput, available)
+
 
             if isValid:
                 score = len(self.userInput) * 10
@@ -166,8 +171,6 @@ class WordGame(BaseGame):
             if self.points >= 100:
                 print("\nCongratulations! You've reached 100 points and won the game!")
 
-        self.endTimer()
-        self.printResults()
 
 
 
