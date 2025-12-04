@@ -28,6 +28,11 @@ object WordGame {
             
             // Calculate and display duration of comparison
             val duration = (end - start) / 1e9d
+            
+            // Display comparison time and total points
+            println(s"random characters generated in $duration seconds.")
+            println(s"Total points: $points")
+            println("")
 
             // Get user input word using the function made below
             val inputWord = userWord()
@@ -35,10 +40,7 @@ object WordGame {
             // Compare user word to random characters and update points
             points += compareUserWord(inputWord, randomString)
 
-            // Display comparison time and total points
-            println(s"Comparison time completed in $duration seconds.")
-            println(s"Total points: $points")
-            println("")
+
         }
         println("Congratulations! You've at least reached 100 points and won the game!") 
     }
