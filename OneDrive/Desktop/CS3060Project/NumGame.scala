@@ -1,5 +1,6 @@
 import scala.io.StdIn._
 import scala.util.Random
+import scala.caps.use
 
 
 // Number Guessing Game where user tries to guess a randomly generated number between 0 and 100
@@ -7,7 +8,13 @@ import scala.util.Random
 object NumGame {
 
     // This is the main game loop
-    def play(randomNum : Int): Unit = {
+    def play(): Unit = {
+        // generate random number to guess and get the time taken to make it
+        val start = System.nanoTime()
+        val randomNum = calcRandNumber()
+        val end = System.nanoTime()
+        val duration = (end - start) / 1e9d
+        println(s"Random number generated in $duration seconds.")
         var found = false
 
         // Continue until the user guesses the correct number
@@ -15,18 +22,8 @@ object NumGame {
             // Get user input number using the function made below
             val usernum = getUserNum()
 
-            // Start timing the amount of time it takes to perform the comparison
-            val start = System.nanoTime()
-
             // Compare user number to random number and update found status
             found = compareUserNum(usernum, randomNum)
-           
-            // End timing and calculate duration
-            val end = System.nanoTime()
-
-            // Calculate and display duration of comparison
-            val duration = (end - start) / 1e9d
-            println(s"Game completed in $duration seconds.")
         }
     }
 
@@ -50,6 +47,10 @@ object NumGame {
     // Function to compare the user's number to the random number
     def compareUserNum(usernum: Int, randomNum: Int): Boolean = {
        // If the number is too low then try again
+        if (usernum < 0 || usernum > 100) {
+            println("Number out of range. Please try again.")
+            return false
+        } else
         if (usernum < randomNum) {
             println("Too low! Try again.")
             return false
@@ -69,7 +70,6 @@ object NumGame {
 
     // This is where scala enters, main generates the number to guess and then starts the play function
     def main(args: Array[String]):Unit = {
-        val randomNum = calcRandNumber()
-        play(randomNum)
+        play()
     }
 }
