@@ -36,17 +36,28 @@ object NumGame {
     def getUserNum(): Int = {
 
         // Prompt user for a number between 0 and 100
-        val usernum = readLine("Enter a number between 0 and 100: ").toInt
+        var usernum = readLine("Enter a number between 0 and 100: ")
+
+        if (usernum.isEmpty) {
+            println("No input detected. Please try again.")
+            return getUserNum()
+        }
+
+        if (!usernum.forall(_.isDigit)) {
+            println("Invalid input. Please enter a valid number.")
+            return getUserNum()
+        }
+        val usernumInt = usernum.toInt
 
         // Validate input is within range 0-100, otherwise prompt again
-        if (usernum < 0 || usernum > 100) {
+        if (usernumInt < 0 || usernumInt > 100) {
             println("Number out of range. Please try again.")
             return getUserNum()
         }
 
         // Display the entered number
-        println(s"You entered: $usernum")
-        return usernum
+        println(s"You entered: $usernumInt")
+        return usernumInt
     }
 
     // Function to compare the user's number to the random number
