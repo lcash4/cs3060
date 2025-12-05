@@ -17,20 +17,16 @@ object WordGame {
         
         // Continue until user reaches 100 points
         while points < 100 do {
-            // Start timing the amount of time it takes to perform the comparison
-            val start = System.nanoTime()
-
+            
             // Generate random characters using the function made below
+            // We also time how long the generation takes
+            val start1 = System.nanoTime()
             val randomString = calcRanChars()
-           
-            // End timing and calculate duration
-            val end = System.nanoTime()
+            val end1 = System.nanoTime()
+            val duration1 = (end1 - start1) / 1e9d
+            println(s"Comparison took $duration1 seconds.")
             
-            // Calculate and display duration of comparison
-            val duration = (end - start) / 1e9d
-            
-            // Display comparison time and total points
-            println(s"random characters generated in $duration seconds.")
+            // Display total points
             println(s"Total points: $points")
             println("")
 
@@ -38,7 +34,12 @@ object WordGame {
             val inputWord = userWord()
 
             // Compare user word to random characters and update points
+            // We also time how long the comparison takes
+            val start2 = System.nanoTime()
             points += compareUserWord(inputWord, randomString)
+            val end2 = System.nanoTime()
+            val duration2 = (end2 - start2) / 1e9d
+            println(s"Comparison took $duration2 seconds.")
 
 
         }

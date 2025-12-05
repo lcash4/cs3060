@@ -78,8 +78,11 @@ class NumberGame(BaseGame):
 
             attempts += 1
 
+            self.startTimer()
             if self.compareUserNum(self.userInput):
                 break
+            self.endTimer()
+            self.printResults()
 
         print("\nGood job, you guessed the secret number!")
         print("It took you", attempts, "tries")
@@ -157,9 +160,10 @@ class WordGame(BaseGame):
                 self.error_count += 1
                 continue
             
-
+            self.startTimer()
             isValid = self.compareUserWord(self.userInput, available)
-
+            self.endTimer()
+            self.printResults()
 
             if isValid:
                 score = len(self.userInput) * 10

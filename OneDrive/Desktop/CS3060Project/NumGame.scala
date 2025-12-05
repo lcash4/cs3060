@@ -21,9 +21,14 @@ object NumGame {
         while found == false do {
             // Get user input number using the function made below
             val usernum = getUserNum()
-
+            
             // Compare user number to random number and update found status
+            // We also time how long the comparison takes
+            val start = System.nanoTime()
             found = compareUserNum(usernum, randomNum)
+            val end = System.nanoTime()
+            val duration = (end - start) / 1e9d
+            println(s"Comparison took $duration seconds.")
         }
     }
 
