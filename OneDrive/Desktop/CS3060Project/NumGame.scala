@@ -61,11 +61,12 @@ object NumGame {
             println("Congratulations! You guessed the number!")
             return true
         }
+        return false
     }
 
     // This function generates a random number between 0 and 100
     def calcRandNumber(): Int = {
-        Random.nextInt(101)
+        return Random.nextInt(100) + 1
     }
 
     // This is where scala enters, main generates the number to guess and then starts the play function
