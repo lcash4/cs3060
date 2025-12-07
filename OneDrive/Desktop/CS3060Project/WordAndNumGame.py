@@ -189,8 +189,39 @@ def main():
 
         if choice == "1":
             NumberGame().play()
+            
+            #Test comparison performance
+            numGame = NumberGame()
+            
+            numGame.calcRandNum()  # Generate number to compare against
+            numGame.startTimer()
+            for i in range(100000):
+                numGame.compareUserNum(10)
+            numGame.endTimer()
+
+            numGame1 = NumberGame()
+            numGame1.startTimer()
+            for i in range(100000):
+                numGame1.calcRandNum()
+            numGame1.endTimer()
+            numGame.printResults()
+            numGame1.printResults()
         elif choice == "2":
             WordGame().playWordGame()
+
+            wordgame = WordGame()
+            wordgame.generateRanChar()  # Generate letters to compare against
+            wordgame.startTimer()
+            for i in range(100000):
+                wordgame.compareUserWord("test", wordgame.value.copy())
+            wordgame.endTimer()
+            wordgame.printResults()
+
+            wordgame.startTimer()
+            for i in range(100000):
+                wordgame.generateRanChar()
+            wordgame.endTimer()
+            wordgame.printResults()
         elif choice == "3":
             print("Goodbye!")
             break
@@ -202,3 +233,4 @@ def main():
 # Run program
 if __name__ == "__main__":
     main()
+

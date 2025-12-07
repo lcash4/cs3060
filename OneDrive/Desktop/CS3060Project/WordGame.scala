@@ -104,5 +104,23 @@ object WordGame {
     // Main method enters to simplystart the game
     def main(args: Array[String]):Unit = {
         play()
+        
+        // The following is for performance testing only, put it in comments to fully play the game with no testing
+        val start = System.nanoTime()
+        for i <- 1 to 100000 do{
+            compareUserWord("scott", ListBuffer('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'))  // Example input word
+        }
+         val end = System.nanoTime()
+         val duration = (end - start) / 1e9d
+
+         val start2 = System.nanoTime()
+         for i <- 1 to 100000 do{
+            calcRanChars()
+         }
+         val end2 = System.nanoTime()
+         val duration2 = (end2 - start2) / 1e9d
+         println(s"Generation took $duration seconds.")
+         println(s"Generation took $duration2 seconds.")
+
     }
 }
