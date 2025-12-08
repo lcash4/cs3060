@@ -119,7 +119,7 @@ object WordGame {
          }
          val end2 = System.nanoTime()
          val duration2 = (end2 - start2) / 1e9d
-         println(s"Generation took $duration seconds.")
+         println(s"Comparison took $duration seconds.")
          println(s"Generation took $duration2 seconds.")
 
     }
