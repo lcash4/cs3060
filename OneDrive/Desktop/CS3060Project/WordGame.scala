@@ -101,6 +101,44 @@ object WordGame {
         return score
     }
 
+    // Test-only version without I/O for benchmarking
+    def compareUserWordNoIO(userword: String, randomString: ListBuffer[Char]): Int = {
+        var score = 0
+        var isValid = true
+
+        breakable {
+            for (char <- userword) {
+                if (!randomString.contains(char)) {
+                    isValid = false
+                    break
+                } else {
+                    randomString.remove(randomString.indexOf(char))
+                }
+            }
+
+            if (isValid) {
+                score = userword.length * 10
+            }
+        }
+        return score
+    }
+
+    // Test-only version of calcRanChars without I/O
+    def calcRanCharsNoIO(): ListBuffer[Char] = {
+        val listOfConsanants = List('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z')
+        val listOfVowels = List('a', 'e', 'i', 'o', 'u')
+        
+        var randomString = ListBuffer[Char]()
+        for (i <- 1 to 15) {
+            if (i < 5) {
+                randomString += listOfVowels(Random.nextInt(listOfVowels.length))
+            } else {
+                randomString += listOfConsanants(Random.nextInt(listOfConsanants.length))
+            }
+        }
+        return randomString
+    }
+
     // Main method enters to simplystart the game
     def main(args: Array[String]):Unit = {
         play()
@@ -108,14 +146,14 @@ object WordGame {
         // The following is for performance testing only, put it in comments to fully play the game with no testing
         val start = System.nanoTime()
         for i <- 1 to 100000 do{
-            compareUserWord("scott", ListBuffer('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'))  // Example input word
+            compareUserWordNoIO("test", ListBuffer('t', 'e', 's', 't', 'a', 'b', 'c', 'd'))
         }
          val end = System.nanoTime()
          val duration = (end - start) / 1e9d
 
          val start2 = System.nanoTime()
          for i <- 1 to 100000 do{
-            calcRanChars()
+            calcRanCharsNoIO()
          }
          val end2 = System.nanoTime()
          val duration2 = (end2 - start2) / 1e9d

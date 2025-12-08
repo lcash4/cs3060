@@ -85,22 +85,28 @@ object NumGame {
         return Random.nextInt(100) + 1
     }
 
+    // This function compares user number to random number without any IO for performance testing
+    def compareUserNumNoIO(usernum: Int, randomNum: Int): Boolean = {
+    if (usernum < randomNum) false
+    else if (usernum > randomNum) false
+    else true
+    }
+
     // This is where scala enters, main generates the number to guess and then starts the play function
     def main(args: Array[String]):Unit = {
         play()
         
         // The following is for performance testing only, put it in comments to fully play the game with no testing
-        val num = 0
         val start = System.nanoTime()
-        for i <- 1 to 100000 do{
-            compareUserNum(0, 4)
+        for i <- 1 to 100000000 do{
+            compareUserNumNoIO(0, 4)
         }
         val end = System.nanoTime()
         val duration = (end - start) / 1e9d
         println(s"Comparison took $duration seconds.")
 
         val start2 = System.nanoTime()
-        for i <- 1 to 100000 do{
+        for i <- 1 to 100000000 do{
             calcRandNumber()
         }
         val end2 = System.nanoTime()

@@ -87,6 +87,15 @@ class NumberGame(BaseGame):
         print("\nGood job, you guessed the secret number!")
         print("It took you", attempts, "tries")
 
+    # This function compares user number to random number without any IO for performance testing
+    def compareUserNumNoIO(self, userNum):
+        if userNum < self.value:
+            return False
+        elif userNum > self.value:
+            return False
+        else:
+            return True
+
 
 
 
@@ -136,6 +145,32 @@ class WordGame(BaseGame):
             else:
                 available.remove(ch)  # remove used letter
         return isValid
+
+    # Test-only version without I/O for benchmarking
+    def compareUserWordNoIO(self, userword, available):
+        isValid = True
+
+        for ch in userword:
+            if ch not in available:
+                isValid = False
+                break
+            else:
+                available.remove(ch)  # remove used letter
+        return isValid
+
+    # Test-only version of generateRanChar without I/O
+    def generateRanCharNoIO(self):
+        """Generate 15 characters without any printing"""
+        value = []
+        
+        # First 4 letters = vowels
+        for _ in range(4):
+            value.append(random.choice(self.vowels))
+        # Remaining 11 = consonants
+        for _ in range(11):
+            value.append(random.choice(self.consonants))
+        
+        return value
 
     def play(self):
         print("\nWORD SCRABBLE GAME")
@@ -196,13 +231,13 @@ def main():
             
             numGame.calcRandNum()  # Generate number to compare against
             numGame.startTimer()
-            for i in range(100000):
-                numGame.compareUserNum(10)
+            for i in range(100000000):
+                numGame.compareUserNumNoIO(10)
             numGame.endTimer()
 
             numGame1 = NumberGame()
             numGame1.startTimer()
-            for i in range(100000):
+            for i in range(100000000):
                 numGame1.calcRandNum()
             numGame1.endTimer()
             numGame.printResults()
@@ -213,18 +248,20 @@ def main():
             #The following is for performance testing only, put it in comments to fully play the game with no testing
 
             wordgame = WordGame()
-            wordgame.generateRanChar()  # Generate letters to compare against
+            testLetters = ['t', 'e', 's', 't', 'a', 'b', 'c', 'd']
             wordgame.startTimer()
-            for i in range(100000):
-                wordgame.compareUserWord("test", wordgame.value.copy())
+            for i in range(100000000):
+                wordgame.compareUserWordNoIO("test", testLetters.copy())
             wordgame.endTimer()
             wordgame.printResults()
+            
+            wordgame2 = WordGame()
+            wordgame2.startTimer()
+            for i in range(100000000):
+                wordgame2.generateRanCharNoIO()
+            wordgame2.endTimer()
+            wordgame2.printResults()
 
-            wordgame.startTimer()
-            for i in range(100000):
-                wordgame.generateRanChar()
-            wordgame.endTimer()
-            wordgame.printResults()
         elif choice == "3":
             print("Goodbye!")
             break
