@@ -35,8 +35,8 @@ object NumGame {
     // Function to get the user's input number
     def getUserNum(): Int = {
 
-        // Prompt user for a number between 0 and 100
-        var usernum = readLine("Enter a number between 0 and 100: ")
+        // Prompt user for a number between 1 and 100
+        var usernum = readLine("Enter a number between 1 and 100: ")
 
         if (usernum.isEmpty) {
             println("No input detected. Please try again.")

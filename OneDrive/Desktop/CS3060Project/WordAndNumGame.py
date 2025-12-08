@@ -190,7 +190,8 @@ def main():
         if choice == "1":
             NumberGame().play()
             
-            #Test comparison performance
+             #The following is for performance testing only, put it in comments to fully play the game with no testing
+ 
             numGame = NumberGame()
             
             numGame.calcRandNum()  # Generate number to compare against
@@ -208,6 +209,8 @@ def main():
             numGame1.printResults()
         elif choice == "2":
             WordGame().playWordGame()
+
+            #The following is for performance testing only, put it in comments to fully play the game with no testing
 
             wordgame = WordGame()
             wordgame.generateRanChar()  # Generate letters to compare against
